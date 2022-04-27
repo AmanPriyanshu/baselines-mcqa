@@ -33,10 +33,10 @@ from transformers import (
 	set_seed,
 )
 from transformers.trainer_utils import is_main_process
-from transformers import EarlyStoppingCallback
+from transformers import EarlyStoppingCallback, default_data_collator
 from dataloader_text import MultipleChoiceDataset as TextMultipleChoiceDataset
 from dataloader_text import Split as TextSplit
-from dataloader_amr import MultipleChoiceDataset as AMRMultipleChoiceDataset
+from dataloader_amr import MultipleChoiceDataset as AMRMultipleChoiceDataset, CustomDataCollatorWithPadding
 from dataloader_amr import Split as AMRSplit
 from sklearn.metrics import f1_score
 
@@ -210,9 +210,14 @@ def main():
 	if model_args.is_amr:
 		MultipleChoiceDataset = AMRMultipleChoiceDataset
 		Split = AMRSplit
+		collate_fn = CustomDataCollatorWithPadding(
+				tokenizer,
+				pad_to_multiple_of=8 if training_args.fp16 else None,
+			)
 	else:
 		MultipleChoiceDataset = TextMultipleChoiceDataset
 		Split = TextSplit
+		collate_fn = default_data_collator
 
 	# If do_train passed, train_dataset by default loads train split from file named train.csv in data directory
 	if training_args.do_train:
@@ -272,6 +277,7 @@ def main():
 		micro_f1 = f1_score(y_true=p.label_ids, y_pred=preds, average='micro', zero_division=0)
 		return {'macro-f1': macro_f1, 'micro-f1': micro_f1}
 
+
 	# Initialize our Trainer
 	trainer = Trainer(
 		model=model,
@@ -279,6 +285,7 @@ def main():
 		train_dataset=train_dataset,
 		eval_dataset=eval_dataset,
 		compute_metrics=compute_metrics,
+		data_collator=collate_fn,
 		callbacks=[EarlyStoppingCallback(early_stopping_patience=3)]
 	)
 
