@@ -5,6 +5,7 @@
 
 import sys
 import os
+from pynvml import *
 
 # adding case hold home directories to path for imports 
 sys.path.insert(0, os.getenv('HOME_PATH'))
@@ -116,6 +117,15 @@ class DataTrainingArguments:
 		default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
 	)
 
+def print_gpu_utilization():
+	if torch.cuda.is_available():
+		nvmlInit()
+		handle = nvmlDeviceGetHandleByIndex(0)
+		info = nvmlDeviceGetMemoryInfo(handle)
+		logger.info(f"GPU memory total: {info.total//1024**2} MB.")
+		logger.info(f"GPU memory occupied: {info.used//1024**2} MB.")
+	else: 
+		logger.info("No cuda device found")
 
 def main():
 	# See all possible arguments in src/transformers/training_args.py
@@ -143,6 +153,9 @@ def main():
 		datefmt="%m/%d/%Y %H:%M:%S",
 		level=logging.INFO if training_args.local_rank in [-1, 0] else logging.WARN,
 	)
+
+	print_gpu_utilization()
+
 	logger.warning(
 		"Process rank: %s, device: %s, n_gpu: %s, distributed training: %s, 16-bits training: %s",
 		training_args.local_rank,
