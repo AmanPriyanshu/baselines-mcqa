@@ -6,6 +6,7 @@
 import sys
 import os
 from pynvml import *
+import torch
 
 # adding case hold home directories to path for imports 
 sys.path.insert(0, os.getenv('HOME_PATH'))
