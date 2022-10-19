@@ -1,4 +1,4 @@
-Runnning case hold with amrbart
+Runnning case hold/logiqa with amrbart and text-only baselines
 
 Setup for this project
 
