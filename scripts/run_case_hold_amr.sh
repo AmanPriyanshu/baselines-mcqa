@@ -4,7 +4,7 @@
 #SBATCH -p gpu --gres=gpu:titanx:1
 #SBATCH -c6
 
-GPU_NUMBER=0
+GPU_NUMBER=-1
 MODEL_NAME='/Users/niko/ML/case_hold/amrbart/model'
 BATCH_SIZE=2
 ACCUMULATION_STEPS=1
@@ -34,5 +34,3 @@ CUDA_VISIBLE_DEVICES=${GPU_NUMBER} HOME_PATH=${HOME_PATH} python experiments/cas
     --is_amr \
     --data_set_path ${DATA_SET_PATH} \
     --max_seq_length 1024 \
-    --fp16 \
-    --fp16_full_eval \
