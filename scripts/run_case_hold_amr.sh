@@ -34,5 +34,3 @@ CUDA_VISIBLE_DEVICES=${GPU_NUMBER} HOME_PATH=${HOME_PATH} python experiments/cas
     --is_amr \
     --data_set_path ${DATA_SET_PATH} \
     --max_seq_length 1024 \
-    --fp16 \
-    --fp16_full_eval \
