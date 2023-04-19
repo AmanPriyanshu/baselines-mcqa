@@ -111,6 +111,7 @@ def convert_examples_to_features(
         choices_inputs = []
 
         for ending_idx, ending in enumerate(example['endings']):
+            print(example)
             context = example['context']
             question = example['question']
 
