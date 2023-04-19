@@ -112,24 +112,12 @@ def convert_examples_to_features(
 
         for ending_idx, ending in enumerate(example['endings']):
             context = example['context']
-            if example.get('question') is not None:
-                question = example['question']
+            if example.get('question') is None:
+                inputs = [tokenizer.bos_token] + context.split() + [tokenizer.eos_token] + [tokenizer.eos_token] + ending.split() + [tokenizer.eos_token]
 
-                inputs = [tokenizer.bos_token] \
-                    + context.split() \
-                    + [tokenizer.eos_token] \
-                    + [tokenizer.eos_token] \
-                    + question.split() \
-                    + ending.split() \
-                    + [tokenizer.eos_token] \
             else:
-                inputs = [tokenizer.bos_token] \
-                    + context.split() \
-                    + [tokenizer.eos_token] \
-                    + [tokenizer.eos_token] \
-                    + question.split() \
-                    + ending.split() \
-                    + [tokenizer.eos_token] \
+                question = example['question']
+                inputs = [tokenizer.bos_token] + context.split() + [tokenizer.eos_token] + [tokenizer.eos_token] + question.split() + ending.split() + [tokenizer.eos_token]
 
             if len(inputs) > max_length:
                 logger.error("Input too long: implementation does not support truncate.")
