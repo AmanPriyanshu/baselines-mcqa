@@ -6,8 +6,8 @@
 
 GPU_NUMBER=0
 MODEL_NAME='/Users/niko/ML/case_hold/amrbart/model'
-BATCH_SIZE=8
-ACCUMULATION_STEPS=2
+BATCH_SIZE=4
+ACCUMULATION_STEPS=4
 TASK='case_hold'
 HOME_PATH='/Users/niko/ML/case_hold'
 DATA_SET_PATH='/Users/niko/ML/case_hold/data/LogiQADataset/dataset_amr'
@@ -34,3 +34,5 @@ CUDA_VISIBLE_DEVICES=${GPU_NUMBER} HOME_PATH=${HOME_PATH} python experiments/cas
     --is_amr \
     --data_set_path ${DATA_SET_PATH} \
     --max_seq_length 1024 \
+    --fp16 \
+    --fp16_full_eval \
