@@ -6,7 +6,7 @@
 
 GPU_NUMBER=0
 MODEL_NAME='/Users/niko/ML/case_hold/amrbart/model'
-BATCH_SIZE=2
+BATCH_SIZE=1
 ACCUMULATION_STEPS=1
 TASK='case_hold'
 HOME_PATH='/Users/niko/ML/case_hold'
